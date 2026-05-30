@@ -1,0 +1,39 @@
+.left-col {
+  flex: 1;
+  background: #5bc5a7;
+  color: white;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+}
+
+.right-col {
+  flex: 1;
+  background: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  height: 100vh;
+}
+
+.left-panel {
+  flex: 1;
+  background: #5bc5a7;
+  color: white;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.right-panel {
+  flex: 1;
+  background: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
