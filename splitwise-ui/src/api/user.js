@@ -10,6 +10,16 @@ export const loginUser = async(credentials) => {
     }
 }
 
+export const getUserProfile = async() => {
+    try {
+        const response = await axiosInstance.get('/user/me');
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch user profile:', error);
+        throw error;
+    }
+}
+
 export const registerUser = async(userDetails) => {
     try {
         const response = await axiosInstance.post('/user/register', userDetails);

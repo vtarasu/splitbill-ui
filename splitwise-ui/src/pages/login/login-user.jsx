@@ -2,9 +2,12 @@ import { Form, Input, Button } from 'antd';
 import { loginUser } from '../../api/user';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { SetUser } from '../../redux/userslice';
 
 function Login() {
     const STORAGE_KEY = 'jwtToken';
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
     const onfinish = async(values) => {
@@ -12,6 +15,7 @@ function Login() {
             const response = await loginUser(values);
             const token = response.token;
             localStorage.setItem(STORAGE_KEY, token);
+            dispatch(SetUser({ userId: response.id, userName: response.username }));
             console.log('Login successful, JWT token stored in localStorage');
             setErrorMessage('');
             navigate('/home');
