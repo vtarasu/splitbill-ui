@@ -1,11 +1,12 @@
 import { useState } from "react";
 import DashboardContent from "./dashboard";
 import BalancesPage from "./BalancesPage";
+import GroupsPage from "./groups/GroupsPage";
 import { useSelector } from "react-redux";
 
 const pages = [
   { id: "Balances", label: "Balances", icon: "💰", content: <BalancesPage /> },
-  { id: "Groups", label: "Groups", icon: "🏠", content: <DashboardContent /> },
+  { id: "Groups", label: "Groups", icon: "🏠", content: <GroupsPage /> },
   { id: "Payments",     label: "Payments",     icon: "💳", content: <DashboardContent /> },
   { id: "settings",  label: "Settings",  icon: "⚙️", content: <DashboardContent /> },
 ];

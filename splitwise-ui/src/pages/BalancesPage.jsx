@@ -40,37 +40,6 @@ export default function BalancesPage() {
     } finally {
       setLoading(false);
     }
-
-    // setSettling((prev) => new Set(prev).add(balance.userId));
-    // try {
-    //   const res = await fetch(`${API_BASE}/balances/settle`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //     },
-    //     body: JSON.stringify({
-    //       fromUserId: balance.direction === "owe" ? userId : balance.userId,
-    //       toUserId:   balance.direction === "owe" ? balance.userId : userId,
-    //       amount:     balance.amount,
-    //     }),
-    //   });
-    //   if (!res.ok) throw new Error("Settle failed");
-    //   // Optimistically mark as settled
-    //   setBalances((prev) =>
-    //     prev.map((b) =>
-    //       b.userId === balance.userId ? { ...b, settled: true, amount: 0 } : b
-    //     )
-    //   );
-    // } catch (err) {
-    //   alert("Failed to settle: " + err.message);
-    // } finally {
-    //   setSettling((prev) => {
-    //     const next = new Set(prev);
-    //     next.delete(balance.userId);
-    //     return next;
-    //   });
-    // }
   };
 
   // --- Summary totals ---
