@@ -3,12 +3,14 @@ import DashboardContent from "./dashboard";
 import BalancesPage from "./BalancesPage";
 import GroupsPage from "./groups/GroupsPage";
 import { useSelector } from "react-redux";
+import SettlementsPage from "./settlement/SettlementsPage";
+import SettingsPage from "./SettingsPage";
 
 const pages = [
   { id: "Balances", label: "Balances", icon: "💰", content: <BalancesPage /> },
   { id: "Groups", label: "Groups", icon: "🏠", content: <GroupsPage /> },
-  { id: "Payments",     label: "Payments",     icon: "💳", content: <DashboardContent /> },
-  { id: "settings",  label: "Settings",  icon: "⚙️", content: <DashboardContent /> },
+  { id: "Payments",     label: "Payments",     icon: "💳", content: <SettlementsPage /> },
+  { id: "settings",  label: "Settings",  icon: "⚙️", content: <SettingsPage /> },
 ];
 
 export default function HomePage() {
@@ -66,7 +68,6 @@ export default function HomePage() {
                 width: "100%",
                 padding: "10px 14px",
                 background: active === page.id ? "#fff" : "transparent",
-                borderLeft: active === page.id ? "2px solid #7c3aed" : "2px solid transparent",
                 border: "none",
                 cursor: "pointer",
                 whiteSpace: "nowrap",
