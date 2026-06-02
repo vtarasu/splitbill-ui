@@ -1,7 +1,7 @@
 import {axiosInstance} from './index';
 
 
-export const getGroups = async() => {
+export const getAllGroups = async() => {
     try {
         const response = await axiosInstance.get('/user/groups');
         return response.data;
@@ -21,12 +21,43 @@ export const deleteGroup = async(groupId) => {
     }
 }
 
+
+export const getGroupInfo = async(groupId) => {
+    try {
+        const response = await axiosInstance.get(`/group/${groupId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch group info:', error);
+        throw error;
+    }
+}
+
 export const createGroup = async (groupData) => {
     try {
         const response = await axiosInstance.post('/group/create', groupData);
         return response.data;
     } catch (error) {
         console.error('Failed to create group:', error);
+        throw error;
+    }
+}
+
+export const addGroupMember = async (groupData) => {
+    try {
+        const response = await axiosInstance.post('/group/add-user', groupData);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to add member to group:', error);
+        throw error;
+    }
+}
+
+export const removeGroupMember = async (groupData) => {
+    try {
+        const response = await axiosInstance.post('/group/remove-user', groupData);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to remove member from group:', error);
         throw error;
     }
 }

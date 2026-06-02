@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import {getGroups, deleteGroup} from "../../api/groups";
+import { getAllGroups, deleteGroup } from "../../api/groups";
 import NewGroup from "./NewGroup";
+import { useNavigate } from "react-router-dom";
 
 const BALANCE_PREVIEW = 3;
 
@@ -82,7 +83,13 @@ export function GroupCard({ id, group, onViewDetails, onDelete }) {
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{ fontSize: 13, padding: "3px", color: "var(--color-text-primary)" }}>
                   {b.from} &nbsp;
-                  <BalanceChip amount={b.amount} />
+                  <span style={{
+                    fontSize: 11, fontWeight: 500, padding: "5px 8px", borderRadius: 999,
+                    background: "#EAF3DE",
+                    color: "#27500A"
+                  }}>
+                    Owes {fmt(b.amount)}
+                  </span>
                   &nbsp;&nbsp;
                   {b.to}
                 </span>
@@ -135,19 +142,20 @@ const ghostBtn = {
 };
 
 // ── Main Page ──────────────────────────────────────────────
-export default function GroupsPage() {
+export default function GroupsPage({ onViewGroup }) {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const fetchGroups = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getGroups();
+      const data = await getAllGroups();
       setGroups(data);
     } catch (err) {
       setError(err.message);
@@ -156,7 +164,7 @@ export default function GroupsPage() {
     }
   }, []);
 
-  
+
 
   useEffect(() => { fetchGroups(); }, [fetchGroups]);
 
@@ -211,7 +219,7 @@ export default function GroupsPage() {
             <GroupCard
               key={g.groupId}
               group={g}
-              onViewDetails={() => {/* navigate to group detail */ }}
+              onViewDetails={() => onViewGroup(g.groupId)}
               onDelete={() => handleDeleteGroup(g.groupId)}
             />
           ))}

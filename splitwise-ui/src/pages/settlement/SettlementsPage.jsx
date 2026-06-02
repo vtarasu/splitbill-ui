@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { userSettlement } from "../../api/user"; 
 
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 10;
 
 const AVATAR_PALETTE = [
   ["#E6F1FB","#0C447C"],["#EEEDFE","#3C3489"],["#E1F5EE","#085041"],

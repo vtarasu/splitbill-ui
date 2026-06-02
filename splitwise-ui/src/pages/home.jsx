@@ -5,20 +5,38 @@ import GroupsPage from "./groups/GroupsPage";
 import { useSelector } from "react-redux";
 import SettlementsPage from "./settlement/SettlementsPage";
 import SettingsPage from "./SettingsPage";
+import GroupDetailPage from "./groups/GroupDetailPage";
 
 const pages = [
   { id: "Balances", label: "Balances", icon: "💰", content: <BalancesPage /> },
   { id: "Groups", label: "Groups", icon: "🏠", content: <GroupsPage /> },
   { id: "Payments",     label: "Payments",     icon: "💳", content: <SettlementsPage /> },
-  { id: "settings",  label: "Settings",  icon: "⚙️", content: <SettingsPage /> },
+  { id: "Settings",  label: "Settings",  icon: "⚙️", content: <SettingsPage /> },
 ];
 
 export default function HomePage() {
   const {userId, userName} = useSelector((state) => state.user);
   const [isOpen, setIsOpen]     = useState(true);
   const [active, setActive]     = useState("Balances");
+  const [selectedGroupId, setSelectedGroupId] = useState(null);
 
-  const currentPage = pages.find((p) => p.id === active);
+const renderContent = () => {
+    if (active === "Groups" && selectedGroupId) {
+      return (
+        <GroupDetailPage
+          groupId={selectedGroupId}
+          onBack={() => setSelectedGroupId(null)}
+        />
+      );
+    }
+    switch (active) {
+      case "Groups":      return <GroupsPage onViewGroup={setSelectedGroupId} />;
+      case "Balances":    return <BalancesPage />;
+      case "Payments":     return <SettlementsPage />;
+      case "Settings":    return <SettingsPage />;
+      default:            return <BalancesPage />;
+    }
+  };
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
@@ -87,7 +105,7 @@ export default function HomePage() {
 
       {/* ── Main content ── */}
       <main style={{ flex: 1, padding: 24, overflow: "auto" }}>
-        {currentPage.content}
+        {renderContent()}
       </main>
     </div>
   );

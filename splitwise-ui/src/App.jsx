@@ -5,6 +5,8 @@ import HomePage from './pages/home'
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { getUserProfile } from './api/user';
 import { SetUser } from './redux/userslice';
+import GroupDetailPage from './pages/groups/GroupDetailPage';
+import GroupsPage from './pages/groups/GroupsPage';
 import './App.css'
 
 function App() {
@@ -41,6 +43,8 @@ function App() {
       <Routes>
         <Route path="/*" element={<AuthLayout />} />
         <Route path="/home" element={<HomePage />} />
+        <Route path="/groups" element={<GroupsPage />} />
+        <Route path="/groups/:groupId" element={<GroupDetailPage />} />
       </Routes>
     </>
   )
