@@ -31,7 +31,7 @@ function App() {
         console.log("User profile fetched successfully");
       } catch (error) {
         console.error("Error fetching user profile:", error.message);
-        localStorage.removeItem("token");
+        localStorage.removeItem("jwtToken");
         navigate('/login');
       }
     };
