@@ -19,3 +19,13 @@ export const settleBalance = async(settlementDetails) => {
         throw error;
     }
 }
+
+export const settleGroupBalance = async(settlementDetails) => {
+    try {
+        const response = await axiosInstance.post('/user/settle/group', settlementDetails);
+        return response.data;
+    } catch (error) {
+        console.error('Settlement failed:', error);
+        throw error;
+    }
+}

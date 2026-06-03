@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import  {getGroupInfo} from "../../api/groups";
 import { getGroupExpenses } from "../../api/expenses";
+import { settleGroupBalance } from "../../api/balances";
 import GroupInfoSection from "./GroupInfo";
 import GroupExpensesSection  from "./GroupExpenses";
 import AddMemberModal from "./AddMember";
@@ -61,6 +62,22 @@ export default function GroupDetailPage({ groupId , onBack }) {
     }
   }, [groupId]);
 
+  const onSettle = async (group, balance) => {
+    setExpLoading(true);
+    setExpError(null);
+    console.log("Settling balance:", balance, "for group:", group.groupId);
+    try {
+      const data = await settleGroupBalance({ groupId: group.groupId, from: balance.from, to: balance.to, amount: balance.amount});
+      console.log("Settlement successful:", data);
+      fetchExpenses(0); 
+      fetchGroupInfo();
+    } catch (err) {
+      setExpError(err.message);
+    } finally {
+      setExpLoading(false);
+    }
+  };
+
   // Fetch both on mount — independently, not chained
   useEffect(() => { fetchGroupInfo(); }, [fetchGroupInfo]);
   useEffect(() => { fetchExpenses(0); }, [fetchExpenses]);
@@ -87,12 +104,14 @@ export default function GroupDetailPage({ groupId , onBack }) {
         onAddExpense={() => setModal("addExpense")}
         onAddMember={() => setModal("addMember")}
         onRemoveMember={() => setModal("removeMember")}
+        onSettle={onSettle}
         onRefresh={fetchGroupInfo}
       />
 
       {/* Section 2 — expenses with pagination */}
       <GroupExpensesSection
         expenses={expenses}
+        members={group?.members ?? []}
         page={page}
         totalPages={totalPages}
         totalElements={totalElements}

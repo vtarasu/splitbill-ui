@@ -7,7 +7,7 @@ export default function ExpenseModal({ expense, members, groupId, onClose, onSav
     const isEdit = !!expense;
     const [desc, setDesc] = useState(expense?.description ?? "");
     const [amount, setAmount] = useState(expense?.amount ?? "");
-    const [date, setDate] = useState(expense?.addedAt ?? new Date().toISOString().slice(0, 10));
+    const [date, setDate] = useState(expense?.expenseDate ?? new Date().toISOString().slice(0, 10));
     const paidByUserId = members.find(m => m.userName === expense?.paidBy)?.userId ?? members[0]?.userId ?? "";
     const [paidBy, setPaidBy] = useState(paidByUserId);
     const [splitStrategy, setSplitStrategy] = useState(expense?.expenseStrategy ?? "EQUAL");
