@@ -29,3 +29,13 @@ export const settleGroupBalance = async(settlementDetails) => {
         throw error;
     }
 }
+
+export const getNonGroupBalances = async() => {
+    try {
+        const response = await axiosInstance.get('/user/nongroup/balances');
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch balances:', error);
+        throw error;
+    }
+}

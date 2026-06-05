@@ -11,6 +11,17 @@ export const getGroupExpenses = async(requestData) => {
     }
 }
 
+export const getNonGroupExpenses = async(requestData) => {
+    try {
+        const response = await axiosInstance.get('/expense/nongroup', { params: requestData });
+        // console.log('Fetched non-group expenses:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch expenses:', error);
+        throw error;
+    }
+}
+
 export const addExpense = async(requestData) => {
     try {
         const response = await axiosInstance.post('/expense/add', requestData);

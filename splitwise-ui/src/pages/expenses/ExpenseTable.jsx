@@ -151,6 +151,110 @@ const STYLES = `
     margin: 0;
     color: var(--color-text-secondary, #9aa5b4);
   }
+
+  /* Participants */
+  .participants-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    cursor: default;
+  }
+
+  .participants-avatars {
+    display: flex;
+    align-items: center;
+  }
+
+  .p-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--color-background-primary, #fff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    margin-left: -7px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.07);
+    transition: transform 0.15s;
+  }
+
+  .p-avatar:first-child {
+    margin-left: 0;
+  }
+
+  .p-count {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary, #370437);
+    background: var(--color-background-secondary, #f0f1f5);
+    border: 1px solid var(--color-border-tertiary, #e4e6ec);
+    border-radius: 20px;
+    padding: 2px 7px;
+    white-space: nowrap;
+    line-height: 1.5;
+  }
+
+  /* Tooltip */
+  .participants-group .p-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: #1a1d23;
+    border-radius: 9px;
+    padding: 8px 12px;
+    min-width: 120px;
+    max-width: 220px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
+    z-index: 20;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+
+  .participants-group:hover .p-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .p-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1a1d23;
+  }
+
+  .p-tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 0;
+  }
+
+  .p-tooltip-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .p-tooltip-name {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #e8eaed;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 export function ExpensesTable({ expenses, loading, error, onEdit, onDelete }) {
@@ -189,6 +293,7 @@ export function ExpensesTable({ expenses, loading, error, onEdit, onDelete }) {
                     <col style={{ width: "10%" }} />
                     <col style={{ width: "10%" }} />
                     <col style={{ width: "10%" }} />
+                    <col style={{ width: "10%" }} />
                 </colgroup>
                 <thead>
                     <tr>
@@ -197,6 +302,7 @@ export function ExpensesTable({ expenses, loading, error, onEdit, onDelete }) {
                         <th>Paid by</th>
                         <th>Amount</th>
                         <th>Split</th>
+                        <th>Participants</th>
                         <th className="actions-col">Actions</th>
                     </tr>
                 </thead>
@@ -216,7 +322,7 @@ export function ExpensesTable({ expenses, loading, error, onEdit, onDelete }) {
 }
 
 function ExpenseRow({ expense, onEdit, onDelete }) {
-    const { description, paidBy, amount, expenseStrategy, expenseDate } = expense;
+    const { description, paidBy, amount, expenseStrategy, expenseDate, splitDetails = [] } = expense;
 
     return (
         <tr className="expense-row">
@@ -241,6 +347,9 @@ function ExpenseRow({ expense, onEdit, onDelete }) {
                     {expenseStrategy}
                 </span>
             </td>
+            <td>
+                <ParticipantsCell splitDetails={splitDetails} />
+            </td>
             <td className="actions-cell">
                 <div style={{ display: "inline-flex", gap: 2 }}>
                     <ActionBtn icon="ti-edit" label="Edit expense" onClick={onEdit} variant="edit" />
@@ -248,6 +357,60 @@ function ExpenseRow({ expense, onEdit, onDelete }) {
                 </div>
             </td>
         </tr>
+    );
+}
+
+// ── Participants ────────────────────────────────────────────────────────────
+
+const AVATAR_COLORS = [
+    "#5C6BC0", "#26A69A", "#EC407A", "#FFA726", "#AB47BC",
+    "#42A5F5", "#66BB6A", "#EF5350", "#8D6E63", "#78909C",
+];
+
+function getAvatarColor(name = "") {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+}
+
+function getInitials(name = "") {
+    const parts = name.trim().split(" ");
+    return parts.length >= 2
+        ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+        : name.slice(0, 2).toUpperCase();
+}
+
+const MAX_AVATARS = 3;
+
+function ParticipantsCell({ splitDetails = []}) {
+
+    const names = splitDetails
+        .map(detail => detail.userName || null)
+        .filter(Boolean);
+
+    if (!names.length) return <span style={{ color: "var(--color-text-secondary)", fontSize: 12 }}>—</span>;
+
+    const visible = names.slice(0, MAX_AVATARS);
+    const remaining = names.length - MAX_AVATARS;
+
+    return (
+        <div className="participants-group">
+
+            {/* Count badge */}
+            <span className="p-count">
+                {names.length} member{names.length !== 1 ? "s" : ""}
+            </span>
+
+            {/* Hover tooltip listing all names */}
+            <div className="p-tooltip">
+                {names.map((name, i) => (
+                    <div key={i} className="p-tooltip-row">
+                        <div className="p-tooltip-dot" style={{ background: getAvatarColor(name) }} />
+                        <span className="p-tooltip-name">{name}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 }
 

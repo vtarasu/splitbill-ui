@@ -111,7 +111,6 @@ export default function GroupDetailPage({ groupId , onBack }) {
       {/* Section 2 — expenses with pagination */}
       <GroupExpensesSection
         expenses={expenses}
-        members={group?.members ?? []}
         page={page}
         totalPages={totalPages}
         totalElements={totalElements}

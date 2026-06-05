@@ -7,10 +7,12 @@ import { useSelector } from "react-redux";
 import SettlementsPage from "./settlement/SettlementsPage";
 import SettingsPage from "./SettingsPage";
 import GroupDetailPage from "./groups/GroupDetailPage";
+import NonGroupExpensesPage from "./nongroup/NonGroupExpensesPage";
 
 const pages = [
   { id: "Balances", label: "Balances", icon: "💰", content: <BalancesPage /> },
   { id: "Groups", label: "Groups", icon: "🏠", content: <GroupsPage /> },
+  { id: "NonGroups", label: "Non Group Expenses", icon: "🧾", content: <NonGroupExpensesPage /> },
   { id: "Payments",     label: "Payments",     icon: "💳", content: <SettlementsPage /> },
   { id: "Settings",  label: "Settings",  icon: "⚙️", content: <SettingsPage /> },
 ];
@@ -34,6 +36,7 @@ const renderContent = () => {
     }
     switch (active) {
       case "Groups":      return <GroupsPage onViewGroup={setSelectedGroupId} />;
+      case "NonGroups":  return <NonGroupExpensesPage />;
       case "Balances":    return <BalancesPage />;
       case "Payments":     return <SettlementsPage />;
       case "Settings":    return <SettingsPage />;

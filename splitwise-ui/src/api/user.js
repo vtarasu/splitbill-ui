@@ -59,3 +59,13 @@ export const userSettlement = async (pageno, size) => {
         throw error;
     }
 }
+
+export const fetchUserDetails = async (requestBody) => {
+    try {
+        const response = await axiosInstance.post('/user/details', requestBody );
+        return response.data;
+    } catch (error) {
+        console.error('Unable to fetch user details:', error);
+        throw error;
+    }
+}

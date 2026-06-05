@@ -41,7 +41,7 @@ export function BalanceChip({ direction, amount }) {
     <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 999,
                    background: isOwe ? "#FCEBEB" : "#EAF3DE",
                    color: isOwe ? "#791F1F" : "#27500A" }}>
-      {isOwe ? `Owes ${fmt(amount)}` : `Gets ${fmt(amount)}`}
+      {isOwe ? ` You Owe ${fmt(amount)}` : ` You Get ${fmt(amount)}`}
     </span>
   );
 }
