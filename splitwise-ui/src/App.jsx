@@ -8,10 +8,15 @@ import { SetUser } from './redux/userslice';
 import GroupDetailPage from './pages/groups/GroupDetailPage';
 import GroupsPage from './pages/groups/GroupsPage';
 import './App.css'
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const stripeKey = import.meta.env.VITE_STRIPE_KEY;
+
+  const stripePromise = loadStripe(stripeKey);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -40,12 +45,14 @@ function App() {
 
   return (
     <>
-      <Routes>
-        <Route path="/*" element={<AuthLayout />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/groups" element={<GroupsPage />} />
-        <Route path="/groups/:groupId" element={<GroupDetailPage />} />
-      </Routes>
+      <Elements stripe={stripePromise}>
+        <Routes>
+          <Route path="/*" element={<AuthLayout />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/groups" element={<GroupsPage />} />
+          <Route path="/groups/:groupId" element={<GroupDetailPage />} />
+        </Routes>
+      </Elements>
     </>
   )
 }

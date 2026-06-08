@@ -8,6 +8,7 @@ import SettlementsPage from "./settlement/SettlementsPage";
 import SettingsPage from "./SettingsPage";
 import GroupDetailPage from "./groups/GroupDetailPage";
 import NonGroupExpensesPage from "./nongroup/NonGroupExpensesPage";
+import SubscriptionPage from "./subscription/SubscriptionPage";
 
 const pages = [
   { id: "Balances", label: "Balances", icon: "💰", content: <BalancesPage /> },
@@ -15,6 +16,7 @@ const pages = [
   { id: "NonGroups", label: "Non Group Expenses", icon: "🧾", content: <NonGroupExpensesPage /> },
   { id: "Payments",     label: "Payments",     icon: "💳", content: <SettlementsPage /> },
   { id: "Settings",  label: "Settings",  icon: "⚙️", content: <SettingsPage /> },
+  { id: "Subscription",  label: "Subscription",  icon: "⭐", content: <SubscriptionPage /> },
 ];
 
 export default function HomePage() {
@@ -40,6 +42,7 @@ const renderContent = () => {
       case "Balances":    return <BalancesPage />;
       case "Payments":     return <SettlementsPage />;
       case "Settings":    return <SettingsPage />;
+      case "Subscription": return <SubscriptionPage />;
       default:            return <BalancesPage />;
     }
   };
