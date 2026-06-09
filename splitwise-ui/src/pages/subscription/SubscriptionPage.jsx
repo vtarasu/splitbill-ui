@@ -441,3 +441,4 @@ const s = {
     fontSize: 11, color: '#d1d5db', letterSpacing: '0.3px',
   },
 };
+  
