@@ -162,7 +162,7 @@ export default function SubscribePage() {
         setIsPremium(subDetails.userType === 'PREMIUM');
         setSubscriptionEnd(subDetails.expiryDate);
 
-        if (isPremiumUser) {
+        if (isPremium) {
           return;
         }
 
@@ -441,4 +441,3 @@ const s = {
     fontSize: 11, color: '#d1d5db', letterSpacing: '0.3px',
   },
 };
-  
