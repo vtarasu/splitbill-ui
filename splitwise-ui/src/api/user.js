@@ -20,6 +20,16 @@ export const getUserProfile = async () => {
     }
 }
 
+export const getSubscriptionDetails = async () => {
+    try {
+        const response = await axiosInstance.get(`/user/subscription/details`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch subscription details:', error);
+        throw error;
+    }
+}
+
 export const registerUser = async (userDetails) => {
     try {
         const response = await axiosInstance.post('/user/register', userDetails);

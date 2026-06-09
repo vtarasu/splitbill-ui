@@ -41,10 +41,34 @@ export function BalanceChip({ direction, amount }) {
     <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 999,
                    background: isOwe ? "#FCEBEB" : "#EAF3DE",
                    color: isOwe ? "#791F1F" : "#27500A" }}>
-      {isOwe ? ` You Owe ${fmt(amount)}` : ` You Get ${fmt(amount)}`}
+      {isOwe ? ` You Owe ${fmt(amount)} ` : ` You Get ${fmt(amount)}`}
     </span>
   );
 }
+
+// ── Group Balance chip ──────────────────────────────────────────
+export function GroupBalanceChip({ direction, amount, username }) {
+   const isOwe = direction === "GIVE";
+  const amountStyle = {
+    fontSize: 11, fontWeight: 600, padding: "2px 7px", borderRadius: 999,
+    background: isOwe ? "#FCEBEB" : "#EAF3DE",
+    color: isOwe ? "#791F1F" : "#27500A",
+    display: "inline-block",
+  };
+  const labelStyle = {
+    fontSize: 11, fontWeight: 400,
+    color: "var(--color-text-secondary)",
+  };
+
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+      <span style={labelStyle}>{isOwe ? "You owe" : "You get"}</span>
+      <span style={amountStyle}>{fmt(amount)}</span>
+      <span style={labelStyle}>{username}</span>
+    </span>
+  );
+}
+
 
 // ── Buttons ───────────────────────────────────────────────
 export function PrimaryBtn({ icon, label, onClick, disabled = false }) {

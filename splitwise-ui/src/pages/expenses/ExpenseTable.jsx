@@ -1,4 +1,4 @@
-import { fmt, fmtDate, Avatar, BalanceChip, SectionSkeleton, ErrorCard, PrimaryBtn, OutlineBtn } from "../../utils/util";
+import { fmt, fmtDate, Avatar, SectionSkeleton, ErrorCard, PrimaryBtn, OutlineBtn } from "../../utils/util";
 import { useState } from "react";
 
 const STYLES = `

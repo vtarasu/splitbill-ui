@@ -1,4 +1,4 @@
-import { fmt, Avatar, cardStyle, BalanceChip, SectionSkeleton, ErrorCard, PrimaryBtn, OutlineBtn } from "../../utils/util";
+import { fmt, Avatar, cardStyle, GroupBalanceChip, SectionSkeleton, ErrorCard, PrimaryBtn, OutlineBtn } from "../../utils/util";
 
 export default function GroupInfoSection({ group, loading, error, onAddExpense, onAddMember, onRemoveMember, onSettle }) {
   if (loading) return <p style={{ padding: 24, color: "gray" }}>Loading Group Info...</p>;
@@ -45,18 +45,13 @@ export default function GroupInfoSection({ group, loading, error, onAddExpense, 
           borderBottom: "0.5px solid var(--color-border-tertiary)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 13, padding: "3px", color: "var(--color-text-primary)" }}>
-              {b.from} &nbsp;
-              <span style={{
-                fontSize: 11, fontWeight: 500, padding: "5px 8px", borderRadius: 999,
-                background: "#EAF3DE",
-                color: "#27500A"
-              }}>
-                Owes {fmt(b.amount)}
-              </span>
-              &nbsp;&nbsp;
-              {b.to}
-            </span>
+            <div key={b.userId} style={{
+              display: "flex", alignItems: "center",
+              justifyContent: "space-between", padding: "8px 0",
+              borderBottom: "0.5px solid var(--color-border-tertiary)"
+            }}>
+              <GroupBalanceChip direction={b.direction} amount={b.amount} username={b.username} />
+            </div>
             <button
               onClick={() => onSettle(group, b)}
               style={{
