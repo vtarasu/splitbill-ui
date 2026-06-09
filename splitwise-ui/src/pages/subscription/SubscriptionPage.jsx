@@ -12,7 +12,6 @@ const benefits = [
   { emoji: '📊', title: 'Expense Charts & Analysis', desc: 'Visual breakdowns, trend lines, and smart category insights.' },
   { emoji: '📄', title: 'Monthly & Yearly Reports', desc: 'Downloadable PDF reports to track your financial health over time.' },
   { emoji: '⚡', title: 'Priority Support', desc: 'Get responses within 2 hours, any day of the week.' },
-  { emoji: '☁️', title: 'Secure Cloud Backup', desc: 'All your data encrypted and synced across all your devices.' },
   { emoji: '🚀', title: 'Early Feature Access', desc: 'Be first to try new tools before they roll out to everyone.' },
 ];
 
@@ -160,8 +159,12 @@ export default function SubscribePage() {
     async function setup() {
       try {
         const subDetails = await getSubscriptionDetails();
-        setIsPremium(subDetails.isPremium);
+        setIsPremium(subDetails.userType === 'PREMIUM');
         setSubscriptionEnd(subDetails.expiryDate);
+
+        if (isPremiumUser) {
+          return;
+        }
 
         const cid = await getCustomer();
         setCustomerId(cid);
