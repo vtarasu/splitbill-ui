@@ -63,7 +63,7 @@ export default function ExpenseModal({ expense, members, groupId, onClose, onSav
                 ? await updateExpense({ ...body, id: expense.expenseId })
                 : await addExpense(body);
             onSaved(); onClose();
-        } catch (err) {
+        } catch (err) { 
             setError(err.message);
         } finally { setLoading(false); }
     };
