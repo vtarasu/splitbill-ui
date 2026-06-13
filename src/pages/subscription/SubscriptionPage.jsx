@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useSelector } from 'react-redux';
-import { getCustomer, setupIntent, subscription } from '../../api/subscription';
+import { getCustomer, setupIntent, subscription, cancelSubscription } from '../../api/subscription';
 import { getSubscriptionDetails } from '../../api/user';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
@@ -103,11 +103,81 @@ function SubscribeForm({ customerId, onSuccess, onCancel }) {
   );
 }
 
-/* ─── Already Premium ────────────────────────────────────────────── */
-function PremiumActive({ expiresAt }) {
+/* ─── Cancel Confirmation Modal ──────────────────────────────────── */
+function CancelConfirmModal({ expiresAt, onConfirm, onClose, loading, error }) {
   const date = expiresAt
     ? new Date(expiresAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
     : null;
+
+  return (
+    <div style={s.overlay}>
+      <div style={s.modal}>
+        <button onClick={onClose} style={s.closeBtn}>✕</button>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+          <div style={{ ...s.modalIconWrap, background: '#fef2f2' }}>⚠️</div>
+          <div>
+            <h2 style={s.modalTitle}>Cancel Premium subscription?</h2>
+            <p style={s.modalSub}>This action can be reversed by resubscribing</p>
+          </div>
+        </div>
+
+        <p style={{ fontSize: 14, color: '#4b5563', lineHeight: 1.6, margin: '0 0 20px' }}>
+          You'll lose access to unlimited expenses, charts &amp; analysis, reports, and priority support
+          {date ? <> at the end of your current billing period, on <strong style={{ color: '#1a1a2e' }}>{date}</strong></> : ''}.
+          No further charges will be made.
+        </p>
+
+        {error && (
+          <div style={{ ...s.errorBox, marginBottom: 16 }}>
+            <span>⚠</span> {error}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button
+            onClick={onClose}
+            disabled={loading}
+            style={{ ...s.secondaryBtn, flex: 1, justifyContent: 'center', opacity: loading ? 0.65 : 1 }}
+          >
+            Keep Premium
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={loading}
+            style={{ ...s.dangerBtn, flex: 1, justifyContent: 'center', opacity: loading ? 0.65 : 1 }}
+          >
+            {loading ? '⏳ Cancelling…' : 'Cancel Subscription'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Already Premium ────────────────────────────────────────────── */
+function PremiumActive({ expiresAt, onCancelled }) {
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [cancelError, setCancelError] = useState('');
+
+  const date = expiresAt
+    ? new Date(expiresAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+    : null;
+
+  async function handleCancel() {
+    setCancelLoading(true);
+    setCancelError('');
+    try {
+      await cancelSubscription();
+      setShowCancelModal(false);
+      onCancelled?.();
+    } catch (err) {
+      setCancelError(err.message || 'Failed to cancel subscription. Please try again.');
+    } finally {
+      setCancelLoading(false);
+    }
+  }
 
   return (
     <div style={s.page}>
@@ -141,6 +211,23 @@ function PremiumActive({ expiresAt }) {
           </div>
         ))}
       </div>
+
+      {/* Cancel link */}
+      <div style={{ marginTop: 28, textAlign: 'center' }}>
+        <button onClick={() => setShowCancelModal(true)} style={s.cancelLink}>
+          Cancel subscription
+        </button>
+      </div>
+
+      {showCancelModal && (
+        <CancelConfirmModal
+          expiresAt={expiresAt}
+          onConfirm={handleCancel}
+          onClose={() => setShowCancelModal(false)}
+          loading={cancelLoading}
+          error={cancelError}
+        />
+      )}
     </div>
   );
 }
@@ -155,17 +242,23 @@ export default function SubscribePage() {
   const [isPremium, setIsPremium] = useState(false);
   const [subscriptionEnd, setSubscriptionEnd] = useState(null);
 
+  async function loadSubscription() {
+    try {
+      const subDetails = await getSubscriptionDetails();
+      setIsPremium(subDetails.userType === 'PREMIUM');
+      setSubscriptionEnd(subDetails.expiryDate);
+      return subDetails.userType === 'PREMIUM';
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     async function setup() {
+      const premium = await loadSubscription();
+      if (premium) return;
+
       try {
-        const subDetails = await getSubscriptionDetails();
-        setIsPremium(subDetails.userType === 'PREMIUM');
-        setSubscriptionEnd(subDetails.expiryDate);
-
-        if (isPremium) {
-          return;
-        }
-
         const cid = await getCustomer();
         setCustomerId(cid);
         const secret = await setupIntent();
@@ -177,7 +270,7 @@ export default function SubscribePage() {
     setup();
   }, []);
 
-  if (isPremium) return <PremiumActive expiresAt={subscriptionEnd} />;
+  if (isPremium) return <PremiumActive expiresAt={subscriptionEnd} onCancelled={loadSubscription} />;
 
   if (isSuccess) {
     return (
@@ -313,6 +406,46 @@ const s = {
     cursor: 'pointer',
     transition: 'background 0.15s ease',
     letterSpacing: '0.2px',
+  },
+
+  /* Secondary button */
+  secondaryBtn: {
+    display: 'inline-flex', alignItems: 'center', gap: 8,
+    background: '#f3f4f6',
+    color: '#374151',
+    border: 'none',
+    borderRadius: 10,
+    padding: '12px 24px',
+    fontSize: 14,
+    fontWeight: 600,
+    cursor: 'pointer',
+    letterSpacing: '0.2px',
+  },
+
+  /* Danger button */
+  dangerBtn: {
+    display: 'inline-flex', alignItems: 'center', gap: 8,
+    background: '#dc2626',
+    color: '#fff',
+    border: 'none',
+    borderRadius: 10,
+    padding: '12px 24px',
+    fontSize: 14,
+    fontWeight: 600,
+    cursor: 'pointer',
+    letterSpacing: '0.2px',
+  },
+
+  /* Cancel link */
+  cancelLink: {
+    background: 'none',
+    border: 'none',
+    color: '#9ca3af',
+    fontSize: 13,
+    fontWeight: 500,
+    textDecoration: 'underline',
+    cursor: 'pointer',
+    padding: 4,
   },
 
   /* Section label */

@@ -28,9 +28,6 @@ export const addExpense = async(requestData) => {
         // console.log('Added expense:', response.data);
         return response.data;
     } catch (error) {
-        if (error.response?.status === 429 && error.response?.data?.code === "MAX_LIMIT_REACHED") {
-            throw new Error("You have reached the maximum limit for expenses. Get Subscription to add more."); 
-        }
         console.error('Failed to add expense:', error);
         throw error;
     }

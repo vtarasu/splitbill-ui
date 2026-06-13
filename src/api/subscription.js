@@ -30,3 +30,14 @@ export const subscription = async (requestBody) => {
         throw error;
     }
 }
+
+export const cancelSubscription = async () => {
+    try {
+        const response = await axiosInstance.post('/stripe/cancel');
+        console.log('Cancel subscription response:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to cancel subscription:', error);
+        throw error;
+    }
+}
