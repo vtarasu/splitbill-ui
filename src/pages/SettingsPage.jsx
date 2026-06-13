@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {updateUserProfile, getUserProfile, updatePassword} from "../api/user";
 import { SetUser } from "../redux/userslice";
+import { getPasswordStrength } from "../utils/util";
 
 export default function SettingsPage() {
 
@@ -128,16 +129,7 @@ function PasswordSection() {
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
 
-  const strength = (() => {
-    let s = 0;
-    if (nw.length >= 8) s++;
-    if (/[A-Z]/.test(nw)) s++;
-    if (/[0-9]/.test(nw)) s++;
-    if (/[^A-Za-z0-9]/.test(nw)) s++;
-    const labels = ["", "Weak", "Fair", "Good", "Strong"];
-    const colors = ["", "#E24B4A", "#EF9F27", "#639922", "#3B6D11"];
-    return { score: s, label: labels[s], color: colors[s] };
-  })();
+  const strength = getPasswordStrength(nw);
 
   const reset = () => { setCur(""); setNw(""); setCfm(""); setToast(null); };
 

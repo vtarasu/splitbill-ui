@@ -4,6 +4,19 @@ import { useState } from "react";
 export const fmt = (n) =>
   "₹" + Math.abs(n).toLocaleString("en-IN", { minimumFractionDigits: 2 });
 
+export function getPasswordStrength(value = "") {
+  let score = 0;
+  if (value.length >= 8) score += 1;
+  if (/[A-Z]/.test(value)) score += 1;
+  if (/[0-9]/.test(value)) score += 1;
+  if (/[^A-Za-z0-9]/.test(value)) score += 1;
+
+  const labels = ["", "Weak", "Fair", "Good", "Strong"];
+  const colors = ["", "#E24B4A", "#EF9F27", "#639922", "#3B6D11"];
+
+  return { score, label: labels[score], color: colors[score] };
+}
+
 export const fmtDate = (s) =>
   new Date(s).toLocaleDateString("en-IN", {
     day: "2-digit", month: "short", year: "numeric",
