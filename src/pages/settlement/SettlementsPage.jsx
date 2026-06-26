@@ -24,7 +24,6 @@ function fmtDate(iso) {
   });
 }
 
-// ── Avatar ────────────────────────────────────────────────
 function Avatar({ name }) {
   return (
     <span style={{
@@ -38,7 +37,6 @@ function Avatar({ name }) {
   );
 }
 
-// ── Pagination bar ────────────────────────────────────────
 function Paginator({ page, totalPages, totalElements, onPageChange }) {
   const start = page * PAGE_SIZE + 1;
   const end   = Math.min((page + 1) * PAGE_SIZE, totalElements);
@@ -88,7 +86,6 @@ function Paginator({ page, totalPages, totalElements, onPageChange }) {
   );
 }
 
-// ── Main page ─────────────────────────────────────────────
 export default function SettlementsPage() {
   const [rows, setRows]               = useState([]);
   const [page, setPage]               = useState(0);
@@ -103,7 +100,6 @@ export default function SettlementsPage() {
     setError(null);
     try {
       const data = await userSettlement(p, PAGE_SIZE);
-      // Expected shape: { content, totalElements, totalPages, totalAmount }
       setRows(data.settlements);
       setTotal(data.totalSettlements);
       setTotalPages(data.totalPages);

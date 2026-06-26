@@ -142,7 +142,6 @@ export default function AddNonGroupExpense({ onClose, onSaved }) {
   );
 }
 
-// StepIndicator unchanged from original
 function StepIndicator({ current }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>

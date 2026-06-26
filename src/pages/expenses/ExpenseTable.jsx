@@ -360,8 +360,6 @@ function ExpenseRow({ expense, onEdit, onDelete }) {
     );
 }
 
-// ── Participants ────────────────────────────────────────────────────────────
-
 const AVATAR_COLORS = [
     "#5C6BC0", "#26A69A", "#EC407A", "#FFA726", "#AB47BC",
     "#42A5F5", "#66BB6A", "#EF5350", "#8D6E63", "#78909C",
