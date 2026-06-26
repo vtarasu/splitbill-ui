@@ -14,12 +14,10 @@ const PAGE_SIZE = 10;
 export default function NonGroupExpensesPage() {
   const { currentUserId } = useSelector(s => s.user);
 
-  // Section 1
   const [balances, setBalances] = useState([]);
   const [balLoading, setBalLoading] = useState(true);
   const [balError, setBalError] = useState(null);
 
-  // Section 2
   const [expenses, setExpenses] = useState([]);
   const [page, setPage] = useState(0);
   const [totalElements, setTotal] = useState(0);

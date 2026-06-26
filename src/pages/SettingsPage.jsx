@@ -20,13 +20,12 @@ function ProfileSection() {
 
   const [email, setEmail]         = useState("");
   const [mobile, setMobile]       = useState("");
-  const [origEmail, setOrigEmail] = useState("");   // ← source of truth for dirty check
-  const [origMobile, setOrigMobile] = useState(""); // ← source of truth for dirty check
+  const [origEmail, setOrigEmail] = useState(""); 
+  const [origMobile, setOrigMobile] = useState(""); 
   const [fetching, setFetching]   = useState(true);
   const [loading, setLoading]     = useState(false);
   const [toast, setToast]         = useState(null);
 
-  // Fetch current profile on mount
   useEffect(() => {
     const fetchMe = async () => {
       setFetching(true);
@@ -35,7 +34,7 @@ function ProfileSection() {
 
         setEmail(data.emailId ?? "");
         setMobile(data.mobileNumber ?? "");
-        setOrigEmail(data.emailId ?? "");   // store originals for dirty check
+        setOrigEmail(data.emailId ?? ""); 
         setOrigMobile(data.mobileNumber ?? "");
       } catch (err) {
         setToast({ type: "error", msg: "Failed to load profile: " + err.message });
@@ -47,7 +46,6 @@ function ProfileSection() {
     fetchMe();
   }, []);
 
-  // Only dirty when user has changed something from what was fetched
   const isDirty = email !== origEmail || mobile !== origMobile;
 
   const reset = () => {
@@ -66,7 +64,6 @@ function ProfileSection() {
     setLoading(true);
     try {
       await updateUserProfile({email, mobile });
-      // Update originals so isDirty resets to false after a successful save
       setOrigEmail(email);
       setOrigMobile(mobile);
       setToast({ type: "success", msg: "Profile updated successfully." });
@@ -119,7 +116,6 @@ function ProfileSection() {
   );
 }
 
-// ── Password section ──────────────────────────────────────
 function PasswordSection() {
   const { currentUserId : userid } = useSelector(s => s.user);
   const [cur, setCur]     = useState("");
@@ -197,7 +193,6 @@ function PasswordSection() {
   );
 }
 
-// ── Shared primitives ─────────────────────────────────────
 function Card({ icon, iconBg, iconColor, title, subtitle, children }) {
   return (
     <div style={{ background: "var(--color-background-primary)",

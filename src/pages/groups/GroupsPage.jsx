@@ -121,7 +121,6 @@ const ghostBtn = {
   borderRadius: 8, background: "none", cursor: "pointer",
 };
 
-// ── Main Page ──────────────────────────────────────────────
 export default function GroupsPage({ onViewGroup }) {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);

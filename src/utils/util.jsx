@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// ── Formatting helpers ────────────────────────────────────
 export const fmt = (n) =>
   "₹" + Math.abs(n).toLocaleString("en-IN", { minimumFractionDigits: 2 });
 
@@ -22,7 +21,6 @@ export const fmtDate = (s) =>
     day: "2-digit", month: "short", year: "numeric",
   });
 
-// ── Avatar ────────────────────────────────────────────────
 const PALETTE = [
   ["#E6F1FB","#0C447C"],["#EEEDFE","#3C3489"],["#E1F5EE","#085041"],
   ["#FAEEDA","#633806"],["#FBEAF0","#72243E"],["#EAF3DE","#27500A"],
@@ -43,7 +41,6 @@ export function initials(name = "") {
   return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
 }
 
-// ── Balance chip ──────────────────────────────────────────
 export function BalanceChip({ direction, amount }) {
   if (direction === "SETTLED")
     return <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 999,
@@ -59,7 +56,6 @@ export function BalanceChip({ direction, amount }) {
   );
 }
 
-// ── Group Balance chip ──────────────────────────────────────────
 export function GroupBalanceChip({ direction, amount, username }) {
    const isOwe = direction === "GIVE";
   const amountStyle = {
@@ -83,7 +79,6 @@ export function GroupBalanceChip({ direction, amount, username }) {
 }
 
 
-// ── Buttons ───────────────────────────────────────────────
 export function PrimaryBtn({ icon, label, onClick, disabled = false }) {
   return (
     <button onClick={onClick} disabled={disabled} style={{
@@ -116,7 +111,6 @@ export function OutlineBtn({ icon, label, onClick, disabled = false }) {
   );
 }
 
-// ── Card ──────────────────────────────────────────────────
 export function Card({ children, style = {} }) {
   return (
     <div style={{ background: "var(--color-background-primary)",
@@ -127,7 +121,6 @@ export function Card({ children, style = {} }) {
   );
 }
 
-// ── Section title ─────────────────────────────────────────
 export function SectionTitle({ children, style = {} }) {
   return (
     <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text-secondary)",
@@ -138,7 +131,6 @@ export function SectionTitle({ children, style = {} }) {
   );
 }
 
-// ── Modal shell ───────────────────────────────────────────
 export function Modal({ title, onClose, children }) {
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0,
@@ -167,7 +159,6 @@ export function Modal({ title, onClose, children }) {
   );
 }
 
-// ── Modal footer ──────────────────────────────────────────
 export function ModalFooter({ onCancel, children }) {
   return (
     <div style={{ display: "flex", gap: 8, justifyContent: "flex-end",
@@ -179,7 +170,6 @@ export function ModalFooter({ onCancel, children }) {
   );
 }
 
-// ── Field wrapper ─────────────────────────────────────────
 export function Field({ label, hint, children }) {
   return (
     <div style={{ marginBottom: 13 }}>
@@ -194,7 +184,6 @@ export function Field({ label, hint, children }) {
   );
 }
 
-// ── Shared input style ────────────────────────────────────
 export const inputSt = {
   width: "100%", padding: "7px 10px", fontSize: 13,
   border: "0.5px solid var(--color-border-secondary)",

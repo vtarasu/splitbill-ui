@@ -42,7 +42,6 @@ export default function BalancesPage() {
     }
   };
 
-  // --- Summary totals ---
   const totalOwed = balances.filter(b => b.direction === "GET")
     .reduce((s, b) => s + b.amount, 0);
   const totalOwe = balances.filter(b => b.direction === "GIVE")

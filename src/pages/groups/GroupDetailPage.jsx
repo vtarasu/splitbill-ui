@@ -14,13 +14,11 @@ const PAGE_SIZE = 10;
 
 export default function GroupDetailPage({ groupId , onBack }) {
   const navigate    = useNavigate();
-
-  // ── Section 1 state ──────────────────────────────────────
+  
   const [group, setGroup]           = useState(null);
   const [groupLoading, setGroupLoading] = useState(true);
   const [groupError, setGroupError] = useState(null);
 
-  // ── Section 2 state ──────────────────────────────────────
   const [expenses, setExpenses]         = useState([]);
   const [page, setPage]                 = useState(0);
   const [totalElements, setTotalElements] = useState(0);
@@ -28,10 +26,8 @@ export default function GroupDetailPage({ groupId , onBack }) {
   const [expLoading, setExpLoading]     = useState(true);
   const [expError, setExpError]         = useState(null);
 
-  // Modal state
   const [modal, setModal] = useState(null);
 
-  // ── Fetch section 1 ──────────────────────────────────────
   const fetchGroupInfo = useCallback(async () => {
     setGroupLoading(true);
     setGroupError(null);
@@ -45,7 +41,6 @@ export default function GroupDetailPage({ groupId , onBack }) {
     }
   }, [groupId]);
 
-  // ── Fetch section 2 ──────────────────────────────────────
   const fetchExpenses = useCallback(async (p = 0) => {
     setExpLoading(true);
     setExpError(null);
@@ -78,7 +73,6 @@ export default function GroupDetailPage({ groupId , onBack }) {
     }
   };
 
-  // Fetch both on mount — independently, not chained
   useEffect(() => { fetchGroupInfo(); }, [fetchGroupInfo]);
   useEffect(() => { fetchExpenses(0); }, [fetchExpenses]);
 
