@@ -25,7 +25,7 @@ export const getNonGroupExpenses = async(requestData) => {
 export const addExpense = async(requestData) => {
     try {
         const response = await axiosInstance.post('/expense/add', requestData);
-        // console.log('Added expense:', response.data);
+        console.log('Added expense:', response.data);
         return response.data;
     } catch (error) {
         console.error('Failed to add expense:', error);
@@ -36,7 +36,7 @@ export const addExpense = async(requestData) => {
 export const updateExpense = async(requestData) => {
     try {
         const response = await axiosInstance.post('/expense/update', requestData);
-        // console.log('Updated expense:', response.data);
+        console.log('Updated expense:', response.data);
         return response.data;
     } catch (error) {
         console.error('Failed to update expense:', error);
@@ -47,7 +47,7 @@ export const updateExpense = async(requestData) => {
 export const deleteExpense = async(request) => {
     try {
         const response = await axiosInstance.delete(`/expense/${request.expenseId}`);
-        // console.log('Deleted expense:', response.data);
+        console.log('Deleted expense:', response.data);
         return response.data;
     } catch (error) {
         console.error('Failed to delete expense:', error);
